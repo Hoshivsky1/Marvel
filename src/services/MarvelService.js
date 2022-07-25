@@ -25,12 +25,14 @@ class MarvelService {
 
     _transormCharacter = (char) => {
         return {
+            id: char.id, 
             name: char.name,
             description: char.description,
             thumbnail: char.thumbnail.path + '.' + char.thumbnail.extension ,
             homepage: char.urls[0].url,
             wiki: char.urls[1].url,
-            id: char.id
+            comics: char.comics.items
+            
         }
     }
 }

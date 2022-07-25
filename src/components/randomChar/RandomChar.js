@@ -15,18 +15,11 @@ class RandomChar extends Component {
         imgStyle: {objectFit: "hover"}
     }
 
-    onError = () => { 
-        this.setState({
-            loading: false,
-            error: true
-        })
-    }
-
     marvelService = new MarvelService();
 
     componentDidMount() {
         this.updateChar();
-        // this.timerId = setInterval(this.updateChar, 3000);
+        //! this.timerId = setInterval(this.updateChar, 3000);
     }
 
     componentWillUnmount() {
@@ -41,14 +34,28 @@ class RandomChar extends Component {
         if(char.description.length > 205 ){
             char.description = char.description.slice(0, 205) + '...';
         }
-
-        
-  
-        this.setState({char, loading: false})
+        this.setState({
+            char,
+            loading: false
+        })
     }
 
+    onCharLoading = () => {
+        this.setState({
+            loading:true
+        })
+    }
+
+    onError = () => { 
+        this.setState({
+            loading: false,
+            error: true
+        })
+    }
+    
     updateChar = () => {
-        const id = Math.floor(Math.random() * (1011400 - 1011000)+ 1011000 );;
+        const id = Math.floor(Math.random() * (1011400 - 1011000)+ 1011000 );
+        this.onCharLoading();
         this.marvelService
             .getCharacters(id)
             .then(this.onCharLoaded)
@@ -92,7 +99,7 @@ const View =({char}) => {
     if(char.thumbnail === imgUrl ) {
         imgStyle = {objectFit: "contain"}
     }
-    
+
     return (
         <div className="randomchar__block">
             <img src={thumbnail} alt="Random character" style={imgStyle} className="randomchar__img"/>
