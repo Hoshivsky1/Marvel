@@ -1,4 +1,5 @@
-// import thor from '../../resources/img/thor.jpeg';
+import PropTypes from 'prop-types';
+
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton'
@@ -46,9 +47,6 @@ class CharInfo extends Component {
         if(char.description === ''){
             char.description = "There is no data about this character" 
         } 
-        // if(char.description.length > 205 ){
-        //     char.description = char.description.slice(0, 205) + '...';
-        // }
         this.setState({
             char,
             loading: false
@@ -132,6 +130,9 @@ const View = ({char}) => {
                 </ul>
         </>
     )
+}
+CharInfo.propTypes = {
+    charId: PropTypes.number
 }
 
 export default CharInfo;
