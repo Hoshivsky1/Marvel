@@ -20,8 +20,7 @@ class CharList extends Component {
     marvelService = new MarvelService();
 
     componentDidMount() {
-        window.addEventListener('scroll', this.showItemByScroll);
-        this.onRequest(); 
+        this.onRequest();
     }
 
     onRequest = (offset) => {
@@ -59,10 +58,22 @@ class CharList extends Component {
         })
     }
 
+    itemRefs = [];
+
+    setRef = (ref) => {
+        this.itemRefs.push(ref);
+    }
+
+    focusOnItem = (id) => {
+        //! Якщо можливо, не зловживають відшкодуванням, лише в крайніх випадках        this.itemRefs.forEach(item => item.classList.remove('char__item_selected'));
+        this.itemRefs[id].classList.add('char__item_selected');
+        this.itemRefs[id].focus();
+    }
+
     //!Цей метод створений для оптимізації,
     //! для того, щоб не розміщувати таку конструкцію в методі візуалізації
     renderItems(arr) {
-        const items =  arr.map((item) => {
+        const items =  arr.map((item, i) => {
             let imgStyle = {'objectFit' : 'cover'};
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
                 imgStyle = {'objectFit' : 'unset'};
@@ -70,16 +81,26 @@ class CharList extends Component {
             
             return (
                 <li 
-
                     className="char__item"
+                    tabIndex={0}
+                    ref={this.setRef}
                     key={item.id}
-                    onClick={() => this.props.onCharSelected(item.id )}>
+                    onClick={() => {
+                        this.props.onCharSelected(item.id);
+                        this.focusOnItem(i);
+                    }}
+                    onKeyPress={(e) => {
+                        if (e.key === ' ' || e.key === "Enter") {
+                            this.props.onCharSelected(item.id);
+                            this.focusOnItem(i);
+                        }
+                    }}>
                         <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                         <div className="char__name">{item.name}</div>
                 </li>
             )
         });
-        //! І ця конструкція зроблена для центрального спінера/помилок
+        //!І ця конструкція зроблена для центрального спінера/помилоки
         return (
             <ul className="char__grid">
                 {items}
@@ -105,7 +126,7 @@ class CharList extends Component {
                 <button 
                     className="button button__main button__long"
                     disabled={newItemLoading}
-                    style={{display: charEnded ? 'none' : 'block'}}
+                    style={{'display': charEnded ? 'none' : 'block'}}
                     onClick={() => this.onRequest(offset)}>
                     <div className="inner">load more</div>
                 </button>
