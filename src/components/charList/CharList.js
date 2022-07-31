@@ -65,7 +65,8 @@ class CharList extends Component {
     }
 
     focusOnItem = (id) => {
-        //! Якщо можливо, не зловживають відшкодуванням, лише в крайніх випадках        this.itemRefs.forEach(item => item.classList.remove('char__item_selected'));
+        //! Якщо можливо, не зловживають відшкодуванням, лише в крайніх випадках        
+        this.itemRefs.forEach(item => item.classList.remove('char__item_selected'));
         this.itemRefs[id].classList.add('char__item_selected');
         this.itemRefs[id].focus();
     }
